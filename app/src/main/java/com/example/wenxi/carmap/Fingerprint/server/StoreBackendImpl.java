@@ -45,8 +45,7 @@ public class StoreBackendImpl implements StoreBackend {
             if (verificationFunction.verify(transactionSignature)) {
                 // Transaction is verified with the public key associated with the user
                 // Do some post purchase processing in the server
-                this.bluetoothinit=this.baseActivity.getBluetoothinit();
-                this.bluetoothinit.send("hello");
+
                 return true;
             }
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {

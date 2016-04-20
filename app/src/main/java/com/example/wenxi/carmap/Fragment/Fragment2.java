@@ -81,7 +81,6 @@ public class Fragment2 extends Fragment {
     private Card getcard(Context context,String title,String description,int photo,String tag){
         final CardProvider provider = new Card.Builder(context)
                 .setTag(tag)//"BIG_IMAGE_BUTTONS_CARD"
-                .setDismissible()
                 .withProvider(new CardProvider())
                 .setLayout(R.layout.material_image_with_buttons_card)
                 .setTitle(title)

@@ -10,7 +10,7 @@
     <string name="基础地图">基础地图</string>
     <string name="全景地图">全景地图</string>
     <string name="指纹安全">指纹安全</string>
-    <string name="用户设置">用户设置</string>
+    <string name="用户设置">连接蓝牙</string>
 
     <string name="cancel">取消</string>
     <string name="use_password">使用密码</string>
@@ -39,4 +39,6 @@
 
 
     <string name="section_format">Page %1$d</string>
+
+    <string name="sign_user">用户登陆</string>
 </resources>

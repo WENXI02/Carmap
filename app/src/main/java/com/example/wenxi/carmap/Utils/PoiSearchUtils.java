@@ -4,10 +4,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
@@ -15,6 +22,10 @@ import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
+import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.baidu.mapapi.search.sug.SuggestionSearch;
+import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +119,65 @@ public class PoiSearchUtils {
             }
 
         }
+
     };
+
+    OnGetGeoCoderResultListener onGetGeoCoderResultListener=new OnGetGeoCoderResultListener() {
+        @Override
+        public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+            if (geoCodeResult == null || geoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                //没有检索到结果
+            }else {
+                Message message=new Message();
+                message.what=3;
+                message.obj=geoCodeResult.getLocation();
+                mhandler.sendMessage(message);
+            }
+        }
+
+        @Override
+        public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+            if (reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                //没有检索到结果
+            }else{
+                String city= reverseGeoCodeResult.getAddressDetail().city;
+                Message message=new Message();
+                message.what=4;
+                message.obj=city;
+                mhandler.sendMessage(message);
+            }
+        }
+    };
+    OnGetSuggestionResultListener onGetSuggestionResultListener=new OnGetSuggestionResultListener() {
+        @Override
+        public void onGetSuggestionResult(SuggestionResult suggestionResult) {
+            String key= suggestionResult.getAllSuggestions().get(0).key;
+            Message message=new Message();
+            message.what=5;
+            message.obj=key;
+            mhandler.sendMessage(message);
+        }
+    };
+    //地理编码
+    public void setGetGeoCode(String date,String city){
+        GeoCoder poi=GeoCoder.newInstance();
+        poi.setOnGetGeoCodeResultListener(onGetGeoCoderResultListener);
+        poi.geocode(new GeoCodeOption().address(date).city(city));
+
+    }
+    //地理反编码
+    public  void setGetReverseGeoCode(LatLng latLng){
+        GeoCoder poi=GeoCoder.newInstance();
+        poi.setOnGetGeoCodeResultListener(onGetGeoCoderResultListener);
+        poi.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
+    }
+
+    //在线建议查询
+    public void setSuggestion(String keyword,String city){
+       SuggestionSearch poi= SuggestionSearch.newInstance();
+        poi.setOnGetSuggestionResultListener(onGetSuggestionResultListener);
+        poi.requestSuggestion(new SuggestionSearchOption().keyword(keyword).city(city));
+    }
     public List<PoiInfo> getmPoiInfo(){
             return mPoiInfo;
     }

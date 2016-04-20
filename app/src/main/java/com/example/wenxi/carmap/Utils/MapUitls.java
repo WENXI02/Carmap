@@ -16,6 +16,7 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
@@ -34,6 +35,7 @@ import java.util.List;
  */
 public class MapUitls {
     private  int datanumber=0;
+    private Handler handler;
     private Handler mhandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -79,6 +81,7 @@ public class MapUitls {
     MapView mMapView;
     BaiduMap mBaiduMap;
     boolean isFirstLoc = true; // 是否首次定位
+    private List<Marker> marker=new ArrayList<>();
 
     public void initMap(MapView mapView, Activity activity,boolean isgo){
         mMapView=mapView;
@@ -161,8 +164,12 @@ public class MapUitls {
                     builder.target(MyLatlng).zoom(19.0f);
                     mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
                 }
+                PoiSearchUtils poiSearchUtils = new PoiSearchUtils();
+                poiSearchUtils.setHandler(handler);
+                poiSearchUtils.setGetReverseGeoCode(MyLatlng);
 
             }
+
         }
 
         public void onReceivePoi(BDLocation poiLocation) {
@@ -238,7 +245,8 @@ public class MapUitls {
                 .position(latLng)
                 .icon(bitmap);
         //在地图上添加Marker，并显示
-        mBaiduMap.addOverlay(option);
+        Marker marker1=(Marker) mBaiduMap.addOverlay(option);
+        marker.add(marker1);
         if (isgo){
             MapStatus.Builder builder = new MapStatus.Builder();
             builder.target(latLng).zoom(15.0f);
@@ -246,6 +254,24 @@ public class MapUitls {
         }
     }
 
+    public void clearOverlay(){
+        for (int i=0;i<marker.size();i++){
+            marker.get(i).remove();
+        }
+
+    }
+
+    public void VioceMap(String city,String keyword,Handler handler){
+        PoiSearchUtils poiSearchUtils = new PoiSearchUtils();
+        poiSearchUtils.setHandler(handler);
+        poiSearchUtils.setGetGeoCode(keyword,city);
+    }
+    public void VioceMapkey(String city,String keyword,Handler handler){
+        PoiSearchUtils poiSearchUtils = new PoiSearchUtils();
+        poiSearchUtils.setHandler(handler);
+        poiSearchUtils.setSuggestion(keyword, city);
+    }
+    public void setHandler(Handler mhandler){handler=mhandler;}
     public static   LatLng getMyLatlng(){
         return MyLatlng;
     }

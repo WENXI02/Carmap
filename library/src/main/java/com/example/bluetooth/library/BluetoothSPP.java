@@ -306,7 +306,13 @@ public class BluetoothSPP {
                 if (CRLF)
                     data += "\r\n";
                 mChatService.write(data.getBytes());
+
+            }else {
+                Toast.makeText(mContext,"请先连接蓝牙",Toast.LENGTH_SHORT).show();
             }
+
+        }else {
+            Toast.makeText(mContext,"请先连接蓝牙",Toast.LENGTH_SHORT).show();
         }
     }
     

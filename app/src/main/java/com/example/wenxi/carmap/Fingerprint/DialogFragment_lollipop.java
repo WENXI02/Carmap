@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.bluetooth.library.Bluetoothinit;
+import com.example.wenxi.carmap.Fragment.Fragment3;
 import com.example.wenxi.carmap.R;
 
 /**
@@ -26,6 +27,12 @@ public class DialogFragment_lollipop extends DialogFragment {
     private SharedPreferences Fist_SharedPreferences_lollipop;
     private Bluetoothinit bluetoothinit;
     private BaseActivity baseActivity;
+    private boolean fist=true;
+
+    public void setisFistconnet(boolean isfisit){
+        fist=isfisit;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,8 +59,10 @@ public class DialogFragment_lollipop extends DialogFragment {
                     if (TextUtils.equals(password,Fist_SharedPreferences_lollipop.getString("User_password",""))) {
                         editText_password.setText("");
                         editText_password.setHint("密码正确");
-                        DialogFragment_lollipop.this.bluetoothinit=DialogFragment_lollipop.this.baseActivity.getBluetoothinit();
-                        DialogFragment_lollipop.this.bluetoothinit.send("hello");
+                        if (!fist){
+                            Fragment3.isuser=true;
+                        }
+                        dismiss();
                     }else{
                         editText_password.setText("");
                         editText_password.setHint("密码错误");

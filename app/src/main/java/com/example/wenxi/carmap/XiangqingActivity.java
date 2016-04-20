@@ -3,8 +3,10 @@ package com.example.wenxi.carmap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,11 +33,14 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
+import com.example.wenxi.carmap.Fingerprint.BaseActivity;
+import com.example.wenxi.carmap.Fingerprint.DialogFragment_lollipop;
 import com.example.wenxi.carmap.Utils.MapUitls;
 import com.example.wenxi.carmap.Utils.PoiDetailResultBeen;
 import com.example.wenxi.carmap.Utils.TransitionHelper;
 import com.example.wenxi.carmap.Utils.ViewUtils;
 
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,13 +48,14 @@ import java.util.TimerTask;
 /**
  * Created by wenxi on 16/4/2.
  */
-public class XiangqingActivity extends AppCompatActivity implements View.OnClickListener {
+public class XiangqingActivity extends BaseActivity implements View.OnClickListener {
     boolean showFAB = true;
     private  MapView mapView;
     private View bottomSheet;
     private Animation growAnimation,shrinkAnimation;
     private static PoiDetailResultBeen mPoiDetailResultBeen;
     private  Activity activity;
+    private DialogFragment_lollipop dialogFragment_lollipop;
     private  MapUitls uitls=new MapUitls();
     public  Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -94,6 +100,7 @@ public class XiangqingActivity extends AppCompatActivity implements View.OnClick
         };
         timer.schedule(task,2000);
         setdate(mPoiDetailResultBeen);
+
         initImagbotton();
     }
 
@@ -242,13 +249,40 @@ public class XiangqingActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
             case R.id.ImageButton_buy:{
+//                  showFingerprint();
                 Snackbar.make(bottomSheet,"在线购物系统暂未开放",Snackbar.LENGTH_LONG).show();
                 break;
             }
             case R.id.ImageButton_link:{
+                try {
+                    Uri uri=Uri.parse(mPoiDetailResultBeen.getDetailUrl());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 break;
             }
         }
+    }
+
+    private  void showFingerprint(){
+
+        if (Build.VERSION.SDK_INT>=23) {
+            showFingerprintAuthenticationDialogFragment();
+        }else{
+            dialogFragment_lollipop=new DialogFragment_lollipop();
+            SharedPreferences Fist_SharedPreferences_lollipop=getSharedPreferences("Fist_SharedPreferences_lollipop",MODE_PRIVATE);
+            boolean isFist=Fist_SharedPreferences_lollipop.getBoolean("Fist",true);
+            if (isFist){
+                dialogFragment_lollipop.setStage(DialogFragment_lollipop.Stage.FISIST);
+                dialogFragment_lollipop.show(getFragmentManager(),"ABC");
+            }else {
+                dialogFragment_lollipop.setStage(DialogFragment_lollipop.Stage.FINGERPRINTLOLLIPOP);
+                dialogFragment_lollipop.show(getFragmentManager(),"ABC");
+            }
+        }
+
     }
 
     //dp转px
@@ -269,5 +303,15 @@ public class XiangqingActivity extends AppCompatActivity implements View.OnClick
         // Start the activity with the participants, animating from one to the other.
         final Bundle transitionBundle = sceneTransitionAnimation.toBundle();
         return transitionBundle;
+    }
+
+    @Override
+    public void onPurchased(byte[] signature) {
+        Snackbar.make(bottomSheet,"指纹支付成功",Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPurchaseFailed() {
+        Snackbar.make(bottomSheet,"指纹支付失败",Snackbar.LENGTH_LONG).show();
     }
 }

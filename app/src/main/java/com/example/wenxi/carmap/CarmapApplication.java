@@ -18,7 +18,7 @@ public class CarmapApplication extends Application {
 
     private static final String TAG = CarmapApplication.class.getSimpleName();
 
-    private ObjectGraph mObjectGraph;
+    private  ObjectGraph mObjectGraph;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,7 +39,7 @@ public class CarmapApplication extends Application {
         mObjectGraph = module != null ? ObjectGraph.create(module) : null;
     }
 
-    public void inject(Object object) {
+    public  void inject(Object object) {
         if (mObjectGraph == null) {
             // This usually happens during tests.
             Log.i(TAG, "Object graph is not initialized.");

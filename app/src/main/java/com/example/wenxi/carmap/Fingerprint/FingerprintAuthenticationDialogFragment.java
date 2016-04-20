@@ -266,7 +266,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             }
         }
         mPassword.setText("");
-        mActivity.onPurchased(null);
+        mActivity.onPurchased("".getBytes());
         dismiss();
     }
 
@@ -340,6 +340,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             signature.update(transaction.toByteArray());
             byte[] sigBytes = signature.sign();
             if (mStoreBackend.verify(transaction, sigBytes)) {
+                //指纹识别的结果
                 mActivity.onPurchased(sigBytes);
                 dismiss();
             } else {

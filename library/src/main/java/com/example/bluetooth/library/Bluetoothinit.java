@@ -129,4 +129,7 @@ public class Bluetoothinit {
             }
         }
     }
+    public Handler getMhandler(){
+        return mhandler;
+    }
 }

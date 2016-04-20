@@ -33,7 +33,7 @@
         android:largeHeap="true"
         android:name=".CarmapApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic2"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -58,9 +58,11 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".Periphery_Activity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Periphery_Activity" ></activity>
         <activity android:name=".XiangqingActivity"  android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".RoutePlanActivity"  android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".RoutePlanActivity"  ></activity>
+        <activity android:name=".RadarAcitivity"></activity>
+        <activity android:name=".Loging_activity"></activity>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
