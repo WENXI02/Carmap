@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.android.wear.AndroidWearManager;
 import com.example.wenxi.carmap.Utils.MapUitls;
 import com.example.wenxi.carmap.Utils.PoiDetailResultBeen;
 import com.example.wenxi.carmap.Utils.TransitionHelper;
@@ -57,6 +58,7 @@ public class Periphery_Activity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_periphery);
+        AndroidWearManager.getAndroidWearManager().close(this);
         final Intent intent=getIntent();
         TAG=intent.getStringExtra("TAG");
         mapUitls=new MapUitls();

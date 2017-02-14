@@ -18,7 +18,11 @@
         <item
             android:id="@+id/leida"
             android:icon="@drawable/ic_menu_share"
-            android:title="寻求帮助" />
+            android:title="附近的人" />
+        <item
+            android:id="@+id/car"
+            android:icon="@drawable/ic_call_24dp"
+            android:title="车牌求助" />
 
     </group>
 
@@ -35,7 +39,18 @@
             <item
                 android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="车载音乐" />
+                android:title="退出登陆" />
+
+            <item
+                android:id="@+id/det_user"
+                android:icon="@drawable/ic_query_builder_24dp"
+                android:title="隐匿用户" />
+            <item
+                android:id="@+id/wear"
+                android:icon="@drawable/ic_watch_black_24dp"
+                android:title="智能手表"
+                ></item>
+
         </menu>
     </item>
 

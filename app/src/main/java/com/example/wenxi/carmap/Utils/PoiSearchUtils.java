@@ -50,21 +50,18 @@ public class PoiSearchUtils {
             option.keyword(keyword);
             option.pageCapacity(20);
             option.pageNum(pagenum);
-            option.radius(10000);//10000米内的美食
+            option.radius(20000);//10000米内的美食
             mPoiSearch.searchNearby(option);
-
-
     }
 
     public void setsearchPoiDetail(String UID){
         if (!TextUtils.isEmpty(UID)) {
-            Log.e("UID","UID不为空");
             PoiSearch mPoiSearch = PoiSearch.newInstance();
             mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
             PoiDetailSearchOption option = new PoiDetailSearchOption();
             mPoiSearch.searchPoiDetail(option.poiUid(UID));
         }else{
-            Log.e("UID","UID为空");
+
         }
 
 

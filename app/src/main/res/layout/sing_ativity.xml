@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/toolbar_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        style="@style/Topeka.TextAppearance.Title"
+        android:elevation="@dimen/elevation_header"
+        android:gravity="center_vertical"
+        android:text="@string/sign_user"
+        android:paddingEnd="@dimen/spacing_double"
+        android:paddingStart="@dimen/spacing_double"
+        android:clipToPadding="false"
+        tools:ignore="UnusedAttribute,NewApi" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingEnd="@dimen/spacing_double"
+        android:clipToPadding="false"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+        <EditText
+            android:id="@+id/first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入用户ID"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
+            android:textSize="@dimen/size_edit_text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingEnd="@dimen/spacing_double"
+        android:clipToPadding="false"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/last_initial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入用户密码"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword|textCapWords"
+            android:textSize="@dimen/size_edit_text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingEnd="@dimen/spacing_double"
+        android:clipToPadding="false"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/user_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入你的电话"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
+            android:textSize="@dimen/size_edit_text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingEnd="@dimen/spacing_double"
+        android:clipToPadding="false"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/car_id"
+            android:text="桂C·0A667"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入汽车车牌（注册）"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
+            android:textSize="@dimen/size_edit_text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="登陆"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/re_login" />
+
+        <Button
+            android:id="@+id/bt_register"
+            android:text="注册"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/re_login" />
+    </RelativeLayout>
+
+</LinearLayout>

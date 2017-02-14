@@ -3,18 +3,18 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            storeFile file('/Users/wenxi/keyapp/wenxi.jks')
+            storeFile file('../wenxi.jks')
             storePassword '210026'
             keyAlias 'wenxi'
             keyPassword '210026'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion "24.0.0 rc2"
+   compileSdkVersion 25
+   buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.wenxi.carmap"
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         signingConfig signingConfigs.config
@@ -27,6 +27,7 @@ android {
         }
         debug {
             signingConfig signingConfigs.config
+            renderscriptDebuggable true
         }
     }
     productFlavors {
@@ -36,18 +37,20 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
     compile 'com.squareup.dagger:dagger:1.2.2'
     compile 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile 'junit:junit:4.12'
     compile 'org.mockito:mockito-core:1.10.19'
-    compile 'com.aurelhubert:ahbottomnavigation:0.1.5'
+    compile 'com.aurelhubert:ahbottomnavigation:2.0.2'
     compile 'com.github.dexafree:materiallist:3.2.0'
     compile 'jp.wasabeef:recyclerview-animators:2.0.0'
     compile project(':library')
-    compile 'com.android.support:palette-v7:23.2.1'
+    compile 'com.android.support:palette-v7:25.0.1'
     compile files('src/main/jniLibs/BaiduLBS_Android.jar')
     compile files('src/main/jniLibs/httpmime-4.1.2.jar')
     compile files('src/main/jniLibs/IndoorscapeAlbumPlugin.jar')
+    compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'com.android.support:support-v4:25.1.1'
 }

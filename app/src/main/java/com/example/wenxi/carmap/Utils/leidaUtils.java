@@ -41,7 +41,7 @@ public class leidaUtils implements RadarUploadInfoCallback, RadarSearchListener{
         //周边雷达设置用户身份标识，id为空默认是设备标识
         RadarSearchManagermManager.setUserID(sharedPreferences.getString("USERID",""));
         RadarUploadInfo info = new RadarUploadInfo();
-        info.comments = sharedPreferences.getString("PHONE","");
+        info.comments = sharedPreferences.getString("CAR_ID","");
         info.pt = MapUitls.getMyLatlng();
         RadarSearchManagermManager.uploadInfoRequest(info);
         RadarNearbySearchOption option = new RadarNearbySearchOption().centerPt(latLng).pageNum(index).radius(5000);
@@ -100,10 +100,24 @@ public class leidaUtils implements RadarUploadInfoCallback, RadarSearchListener{
 
     @Override
     public void onGetClearInfoState(RadarSearchError radarSearchError) {
-
+        if (radarSearchError == RadarSearchError.RADAR_NO_ERROR) {
+            //清除成功
+            Toast.makeText(mcontext, "隐匿成功", Toast.LENGTH_LONG)
+                    .show();
+        } else {
+            //清除失败
+            Toast.makeText(mcontext, "隐匿失败", Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 
     public static RadarNearbyResult getradalist(){
         return mRadarNearbyResult;
+    }
+
+    public  void ClearInfo(){
+        SharedPreferences sharedPreferences=mcontext.getSharedPreferences("USER",mcontext.MODE_PRIVATE);
+        RadarSearchManagermManager.setUserID(sharedPreferences.getString("USERID",""));
+        RadarSearchManagermManager.clearUserInfo();
     }
 }

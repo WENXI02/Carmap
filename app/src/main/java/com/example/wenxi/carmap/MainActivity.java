@@ -2,6 +2,7 @@ package com.example.wenxi.carmap;
 
 import android.Manifest;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.wear.AndroidWearDatabase;
+import com.android.wear.AndroidWearManager;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.baidu.location.LocationClient;
@@ -47,6 +50,7 @@ import com.example.wenxi.carmap.Utils.MapUitls;
 import com.example.wenxi.carmap.Utils.PermissionUtil;
 import com.example.wenxi.carmap.Utils.RoutePlanUtils;
 import com.example.wenxi.carmap.Utils.leidaUtils;
+import com.example.wenxi.carmap.VolleyUtils.Carinfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -92,9 +96,30 @@ public class MainActivity extends BaseActivity
                         JSONArray array=jsonObject.getJSONArray("environment");
                         int a=array.getJSONObject(0).getInt("temparature");
                         int b=array.getJSONObject(0).getInt("humidity");
-                        int c=array.getJSONObject(0).getInt("oil");
+                        int c=array.getJSONObject(0).getInt("oil mass");
                         Toast.makeText(MainActivity.this,"当前湿度"+ String.valueOf(a)+"当前温度"+ String.valueOf(b)
                         +"当前油量"+ String.valueOf(c),Toast.LENGTH_LONG).show();
+                       if (c<=24){
+                            AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                            builder.setTitle("当前汽车油量不足")
+                                   .setMessage("是否前往附近的加油站？")
+                                    .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent=new Intent();
+                                    intent.putExtra("TAG","加油站");
+                                    intent.setClass(MainActivity.this, Periphery_Activity.class);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            }).setPositiveButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                       }
                     }catch (Exception e){
 
                     }
@@ -148,6 +173,7 @@ public class MainActivity extends BaseActivity
         }
     };
 
+
     public static Bluetoothinit bluetoothinit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,9 +212,9 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);//R.drawable.ic_maps_local_restaurant
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem("位置信息", R.drawable.ic_maps_place, Color.parseColor("#455C65"));
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem("周边服务", R.drawable.ic_maps_local_bar, Color.parseColor("#00886A"));
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem("我的车辆", R.drawable.ic_directions_car_white_24dp, Color.parseColor("#8B6B62"));
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem("位置信息", R.drawable.ic_maps_place, R.color.weizi);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem("周边服务", R.drawable.ic_maps_local_bar, R.color.zoubian);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem("我的车辆", R.drawable.ic_directions_car_white_24dp, R.color.mycar);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
         bottomNavigationItems.add(item3);
@@ -198,7 +224,7 @@ public class MainActivity extends BaseActivity
 //        bottomNavigation.setColored(true);
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(int position, boolean wasSelected) {
+            public boolean onTabSelected(int position, boolean wasSelected) {
                  fragment2=new Fragment2();
                  fragment3=new Fragment3();
                 if (!wasSelected){
@@ -232,6 +258,7 @@ public class MainActivity extends BaseActivity
 
                     }
                 }
+                return true;
             }
         });
     }
@@ -356,10 +383,15 @@ public class MainActivity extends BaseActivity
             mapUitls.setMap();
 
         } else if (id == R.id.nav_manage) {
-            Toast.makeText(MainActivity.this,"在线车载音乐暂未上线",Toast.LENGTH_SHORT).show();
-
-
-
+            SharedPreferences sharedPreferences=getSharedPreferences("USER",MODE_PRIVATE);
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putBoolean("isloging",false);
+            editor.putString("USERID","");
+            editor.putString("PASSWORD","");
+            editor.putString("PHONE","");
+            editor.putString("CAR_ID","");
+            editor.apply();
+            Toast.makeText(MainActivity.this,"退出成功",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
 
             showFingerprint();
@@ -378,8 +410,32 @@ public class MainActivity extends BaseActivity
                 intent.setClass(MainActivity.this,Loging_activity.class);
                 startActivity(intent);
             }
-        }
+        }else if (id== R.id.car){
+            SharedPreferences sharedPreferences=getSharedPreferences("USER",MODE_PRIVATE);
+            boolean islog=sharedPreferences.getBoolean("isloging",false);
+            if (islog){
+                Intent intent=new Intent();
+                intent.setClass(getApplicationContext(),QueryCarIdActivity.class);
+                startActivity(intent);
+            }else {
+                Intent intent=new Intent();
+                intent.setClass(MainActivity.this,Loging_activity.class);
+                startActivity(intent);
+            }
 
+        }else if (id==R.id.det_user){
+            mleidaUtils.ClearInfo();
+        }else if (id==R.id.wear){
+            SharedPreferences sharedPreferences=getSharedPreferences("OPENWEAR",MODE_PRIVATE);
+            boolean isopen=sharedPreferences.getBoolean("isopen",false);
+            if (isopen){
+                item.setTitle("打开手表");
+                sharedPreferences.edit().putBoolean("isopen",false).apply();
+            }else {
+                item.setTitle("关闭手表");
+                sharedPreferences.edit().putBoolean("isopen",true).apply();
+            }
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -419,7 +475,6 @@ public class MainActivity extends BaseActivity
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId()==R.id.action_voice){
             try {
-
 
                 Intent intent = new Intent();
                 intent.setAction(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
