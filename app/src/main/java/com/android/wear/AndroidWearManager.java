@@ -56,7 +56,7 @@ public class AndroidWearManager {
                 .setContentTitle(database.getContentTitle())
                 // Content for API <24 (7.0 and below) devices
                 .setContentText(database.getContentText())
-                .setSmallIcon(R.mipmap.ic2)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         context.getResources(),
                         R.drawable.ic_reply_white_18dp))
